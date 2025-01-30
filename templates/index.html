@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en" oncontextmenu="return false">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DivyaDrishti - The Mind Guesser</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary-color: #2962ff;
+        --secondary-color: #0039cb;
+        --accent-color: #768fff;
+        --background: #f5f5f5;
+        --text-primary: #212121;
+        --text-secondary: #757575;
+        --white: #ffffff;
+        --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        user-select: none;
+      }
+
+      body {
+        font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+        background: var(--background);
+        color: var(--text-primary);
+        line-height: 1.6;
+        min-height: 100vh;
+        overflow-x: hidden;
+
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        margin: 0;
+        min-height: 100vh;
+      }
+
+      .game-container {
+        display: flex;
+        min-height: 100vh;
+        max-width: 1400px;
+        margin: 0 auto;
+        z-index: 2;
+      }
+
+      .genie-section {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        position: relative;
+      }
+
+      .genie-container {
+        position: sticky;
+        top: 50px;
+        width: 300px;
+        height: 500px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: var(--shadow);
+        animation: floatAnimation 3s ease-in-out infinite;
+        overflow: hidden;
+      }
+
+      .genie-icon {
+        font-size: 120px;
+        color: var(--white);
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        z-index: 2;
+      }
+
+      .main-content {
+        flex: 2;
+        padding: 4.5rem;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .progress-container {
+        width: 100%;
+        max-width: 600px;
+        background: #e0e0e0;
+        height: 10px;
+        border-radius: 5px;
+        overflow: hidden;
+        position: relative;
+        margin-bottom: 80px;
+      }
+
+      .progress-bar {
+        height: 100%;
+        width: 0;
+        background: linear-gradient(90deg, red, yellow);
+        transition: width 0.7s ease;
+        position: relative;
+      }
+
+      .progress-label {
+        position: absolute;
+        top: 15px;
+        right: 0;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+      }
+
+      .section {
+        background: var(--white);
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: var(--shadow);
+        max-width: 600px;
+        width: 100%;
+        opacity: 1;
+        transform: translateY(0);
+        transition: var(--transition);
+        position: absolute;
+        top: 220px;
+      }
+
+      .section.hidden {
+        opacity: 0;
+        transform: translateY(20px);
+        pointer-events: none;
+      }
+
+      .game-title {
+        font-size: 3.5rem;
+        color: white;
+        margin-bottom: 1rem;
+        text-align: center;
+        font-weight: 700;
+        letter-spacing: 2px;
+      }
+
+      .button-container {
+        display: flex;
+        flex-wrap: wrap;
+        align-content: center;
+        justify-content: center;
+        gap: 1rem;
+        margin: 1.5rem auto;
+        width: 100%;
+        max-width: 800px; /* Constrains maximum width */
+        padding: 0 1rem;
+      }
+
+      button {
+        gap: 12px;
+        min-width: 140px;
+        position: relative;
+        display: inline-flex; /* Changed to inline-flex */
+        align-items: center;
+        justify-content: center;
+        min-width: 120px; /* Added minimum width for consistency */
+        padding: 0.8rem 1.5rem;
+        color: #fff;
+        font-size: 1rem;
+        font-weight: 700;
+        text-decoration: none;
+        background: linear-gradient(
+    45deg,
+    #00fff2,
+    #00d4ff,
+    #0083ff,
+    #0051ff,
+    #6a00ff,
+    #9500ff,
+    #c700ff,
+    #ff00c8,
+    #ff0099,
+    #ff00c8,
+    #9500ff,
+    #6a00ff,
+    #0083ff,
+    #00fff2
+);
+        background-size: 400%;
+        cursor: pointer;
+        transition: 0.3s;
+        z-index: 1;
+        border-radius: 8px;
+        border: none;
+      }
+
+      button:hover:not(:disabled) {
+        animation: animate 8s linear infinite;
+        transform: translateY(-2px);
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      }
+
+      button:disabled {
+        background: #888;
+        cursor: not-allowed;
+        animation: none;
+        opacity: 0.7;
+      }
+
+      button:before {
+        content: "";
+        position: absolute;
+        inset: -5px; /* Simplified from individual properties */
+        z-index: -1;
+        background: linear-gradient(
+    45deg,
+    #00fff2,
+    #00d4ff,
+    #0083ff,
+    #0051ff,
+    #6a00ff,
+    #9500ff,
+    #c700ff,
+    #ff00c8,
+    #ff0099,
+    #ff00c8,
+    #9500ff,
+    #6a00ff,
+    #0083ff,
+    #00fff2
+);
+        background-size: 400%;
+        opacity: 0;
+        transition: 0.2s;
+        border-radius: 8px;
+        top: -2px;
+        right: -2px;
+        bottom: -2px;
+        left: -2px;
+      }
+
+      button:hover:not(:disabled):before {
+        filter: blur(40px);
+        opacity: 1;
+        animation: animate 8s linear infinite;
+      }
+
+      @keyframes animate {
+        0% {
+          background-position: 0%;
+        }
+        100% {
+          background-position: 400%;
+        }
+      }
+
+      #question {
+        font-size: 2rem;
+        text-align: center;
+        color: var(--text-primary);
+        font-weight: 700;
+        min-height: 3.6rem;
+      }
+
+      #result-name {
+        font-size: 2rem;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+        text-align: center;
+      }
+
+      #result-description {
+        font-size: 1.1rem;
+        color: var(--text-secondary);
+        margin-bottom: 1.5rem;
+        text-align: center;
+      }
+
+      @keyframes floatAnimation {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+      }
+
+      @media (max-width: 1024px) {
+        .game-container {
+          flex-direction: column;
+        }
+
+        .genie-section {
+          height: 300px;
+        }
+
+        .genie-container {
+          position: relative;
+          top: 0;
+          width: 200px;
+          height: 200px;
+        }
+
+        .genie-icon {
+          font-size: 80px;
+        }
+
+        .main-content {
+          padding: 1rem;
+        }
+
+        .section {
+          position: relative;
+          top: 0;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .button-container {
+          flex-direction: column;
+        }
+
+        button {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+      .glass {
+        background: rgb(51 51 51 / 32%);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 10px;
+      }
+      h1,
+      p,
+      h2,
+      h3,
+      #question,
+      #result-name,
+      #result-description {
+        color: white;
+      }
+
+      canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+      }
+
+      .credits {
+        position: fixed;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.696);
+        z-index: 2;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="bgCanvas"> </canvas>
+    <div class="game-container">
+      <div class="genie-section">
+        <div class="genie-container">
+          <img
+            src="{{ url_for('static', filename='images/genie.png') }}"
+            alt="Genie"
+          />
+        </div>
+      </div>
+
+      <div class="main-content">
+        <img
+          src="{{url_for('static', filename='images/logo-2.png')}}"
+          width="470px"
+        />
+        <div class="progress-container">
+          <div id="progress-bar" class="progress-bar"></div>
+          <div class="progress-label">
+            <span id="progress-percentage">0%</span> Complete
+          </div>
+        </div>
+
+        <div id="start-section" class="section glass">
+          <h2 style="text-align: center">
+            Welcome to Divya Drishti - A Mind Reader
+          </h2>
+          <p style="text-align: center">
+            Think of a character, object, or animal, and I'll try to guess it!
+          </p>
+          <div class="button-container">
+            <button onclick="showThemeSelection()">
+              <i class="fas fa-play"></i> Start Game
+            </button>
+          </div>
+        </div>
+
+        <div id="theme-section" class="section hidden glass">
+          <h2 style="text-align: center">Select Your Category</h2>
+          <div class="button-container">
+            <button onclick="startGame('characters')">
+              <i class="fas fa-user"></i> Characters
+            </button>
+            <button onclick="startGame('objects')">
+              <i class="fas fa-cube"></i> Objects
+            </button>
+            <button onclick="startGame('animals')">
+              <i class="fas fa-paw"></i> Animals
+            </button>
+          </div>
+        </div>
+
+        <div id="question-box" class="section hidden glass">
+          <h3 id="question"></h3>
+          <div class="button-container">
+            <button onclick="postAnswer('y')">
+              <i class="fas fa-check"></i> Yes
+            </button>
+            <button onclick="postAnswer('n')">
+              <i class="fas fa-times"></i> No
+            </button>
+            <button onclick="postAnswer('idk')">
+              <i class="fas fa-question"></i> Don't Know
+            </button>
+            <button onclick="postAnswer('p')">
+              <i class="fas fa-thumbs-up"></i> Probably
+            </button>
+            <button onclick="postAnswer('pn')">
+              <i class="fas fa-thumbs-down"></i> Probably Not
+            </button>
+            <button onclick="goBack()">
+              <i class="fas fa-undo"></i> Go Back
+            </button>
+          </div>
+        </div>
+
+        <div id="result-section" class="section hidden glass">
+          <h3 id="result-name"></h3>
+          <p id="result-description"></p>
+          <div class="button-container">
+            <button onclick="playAgain()">
+              <i class="fas fa-redo"></i> Play Again
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <span class="credits">Developed by Students of Class 11th @ DWPS ASHTA</span>
+
+    <!-- Audio for Gameplay -->
+    <audio
+      id="startSound"
+      src="{{ url_for('static', filename='audio/start.wav') }}"
+      preload="auto"
+    ></audio>
+    <audio
+      id="buttonClickSound"
+      src="{{ url_for('static', filename='audio/select.mp3') }}"
+      preload="auto"
+    ></audio>
+    <audio
+      id="resultSound"
+      src="{{ url_for('static', filename='audio/result.wav') }}"
+      preload="auto"
+    ></audio>
+
+    <script>
+      const API_BASE = "http://localhost:5000";
+      let sessionId = Date.now();
+      let buttonsEnabled = true;
+
+      // Prevent right-click
+      document.addEventListener("contextmenu", (event) =>
+        event.preventDefault()
+      );
+
+      // Disable keyboard shortcuts
+      document.addEventListener("keydown", function (event) {
+        if (event.ctrlKey || event.metaKey) {
+          event.preventDefault();
+        }
+      });
+
+      function updateProgress(progression = 0) {
+        const progressBar = document.getElementById("progress-bar");
+        const progressText = document.getElementById("progress-percentage");
+
+        // Smooth animation for progress bar
+        progressBar.style.width = `${progression}%`;
+        progressText.textContent = `${Math.round(progression)}`;
+
+        // Update color based on progression
+        const hue = 200 + progression * 0.6; // Shift from blue to purple
+        progressBar.style.background = `linear-gradient(90deg, 
+                hsl(0, 100%, 50%), 
+                hsl(60deg, 100%, 50%)
+            )`;
+      }
+
+      function showSection(sectionId) {
+        document.querySelectorAll(".section").forEach((section) => {
+          if (section.id === sectionId) {
+            section.classList.remove("hidden");
+          } else {
+            section.classList.add("hidden");
+          }
+        });
+      }
+
+      function showThemeSelection() {
+        playSound("start");
+        showSection("theme-section");
+        updateProgress(0);
+      }
+
+      function disableButtons(duration = 2000) {
+        if (!buttonsEnabled) return;
+        buttonsEnabled = false;
+        document.querySelectorAll("button").forEach((button) => {
+          button.disabled = true;
+        });
+        setTimeout(() => {
+          buttonsEnabled = true;
+          document.querySelectorAll("button").forEach((button) => {
+            button.disabled = false;
+          });
+        }, duration);
+      }
+
+      function startGame(theme) {
+        playSound("click");
+        disableButtons();
+        fetch(`${API_BASE}/start`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ theme, session_id: sessionId }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.error) throw new Error(data.error);
+            showSection("question-box");
+            updateQuestion(data.question);
+            updateProgress(data.progression);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert(error.message || "Failed to start game. Please try again.");
+          });
+      }
+
+      function updateQuestion(question) {
+        const questionElement = document.getElementById("question");
+        questionElement.style.opacity = "0";
+        setTimeout(() => {
+          questionElement.innerText = question;
+          questionElement.style.opacity = "1";
+        }, 300);
+      }
+
+      function postAnswer(answer) {
+        playSound("click");
+        if (!buttonsEnabled) return;
+        disableButtons();
+
+        fetch(`${API_BASE}/answer`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ answer, session_id: sessionId }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.error) throw new Error(data.error);
+
+            updateProgress(data.progression);
+
+            if (data.name) {
+              showResult(data);
+            } else {
+              updateQuestion(data.question);
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert(
+              error.message || "Failed to process answer. Please try again."
+            );
+          });
+      }
+
+      function showResult(data) {
+        playSound("result");
+        document.getElementById("result-name").innerText = data.name;
+        document.getElementById("result-description").innerText =
+          data.description;
+        showSection("result-section");
+      }
+
+      function goBack() {
+        if (!buttonsEnabled) return;
+        disableButtons();
+
+        fetch(`${API_BASE}/go_back`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ session_id: sessionId }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.error) throw new Error(data.error);
+            updateQuestion(data.question);
+            updateProgress(data.progression);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert(error.message || "Failed to go back. Please try again.");
+          });
+      }
+
+      function playAgain() {
+        playSound("click");
+        sessionId = Date.now();
+        showSection("theme-section");
+        updateProgress(0);
+      }
+
+      // Initialize game
+      document.addEventListener("DOMContentLoaded", () => {
+        showSection("start-section");
+        updateProgress(0);
+      });
+
+      // Play sound on button click
+      // Sound management
+      const sounds = {
+        start: document.getElementById("startSound"),
+        click: document.getElementById("buttonClickSound"),
+        result: document.getElementById("resultSound"),
+      };
+
+      function playSound(type) {
+        sounds[type].currentTime = 0;
+        sounds[type].play();
+      }
+
+      (function () {
+        var requestAnimationFrame =
+          window.requestAnimationFrame ||
+          window.mozRequestAnimationFrame ||
+          window.webkitRequestAnimationFrame ||
+          window.msRequestAnimationFrame ||
+          function (callback) {
+            window.setTimeout(callback, 1000 / 60);
+          };
+        window.requestAnimationFrame = requestAnimationFrame;
+      })();
+
+      // Terrain stuff.
+      var background = document.getElementById("bgCanvas"),
+        bgCtx = background.getContext("2d"),
+        width = window.innerWidth,
+        height = document.body.offsetHeight;
+
+      height < 400 ? (height = 400) : height;
+
+      background.width = width;
+      background.height = height;
+
+      function Terrain(options) {
+        options = options || {};
+        this.terrain = document.createElement("canvas");
+        this.terCtx = this.terrain.getContext("2d");
+        this.scrollDelay = options.scrollDelay || 90;
+        this.lastScroll = new Date().getTime();
+
+        this.terrain.width = width;
+        this.terrain.height = height;
+        this.fillStyle = options.fillStyle || "#191D4C";
+        this.mHeight = options.mHeight || height;
+
+        // generate
+        this.points = [];
+
+        var displacement = options.displacement || 140,
+          power = Math.pow(2, Math.ceil(Math.log(width) / Math.log(2)));
+
+        // set the start height and end height for the terrain
+        this.points[0] = this.mHeight; //(this.mHeight - (Math.random() * this.mHeight / 2)) - displacement;
+        this.points[power] = this.points[0];
+
+        // create the rest of the points
+        for (var i = 1; i < power; i *= 2) {
+          for (var j = power / i / 2; j < power; j += power / i) {
+            this.points[j] =
+              (this.points[j - power / i / 2] +
+                this.points[j + power / i / 2]) /
+                2 +
+              Math.floor(Math.random() * -displacement + displacement);
+          }
+          displacement *= 0.6;
+        }
+
+        document.body.appendChild(this.terrain);
+      }
+
+      Terrain.prototype.update = function () {
+        // draw the terrain
+        this.terCtx.clearRect(0, 0, width, height);
+        this.terCtx.fillStyle = this.fillStyle;
+
+        if (new Date().getTime() > this.lastScroll + this.scrollDelay) {
+          this.lastScroll = new Date().getTime();
+          this.points.push(this.points.shift());
+        }
+
+        this.terCtx.beginPath();
+        for (var i = 0; i <= width; i++) {
+          if (i === 0) {
+            this.terCtx.moveTo(0, this.points[0]);
+          } else if (this.points[i] !== undefined) {
+            this.terCtx.lineTo(i, this.points[i]);
+          }
+        }
+
+        this.terCtx.lineTo(width, this.terrain.height);
+        this.terCtx.lineTo(0, this.terrain.height);
+        this.terCtx.lineTo(0, this.points[0]);
+        this.terCtx.fill();
+      };
+
+      // Second canvas used for the stars
+      bgCtx.fillStyle = "#05004c";
+      bgCtx.fillRect(0, 0, width, height);
+
+      // stars
+      function Star(options) {
+        this.size = Math.random() * 2;
+        this.speed = Math.random() * 0.05;
+        this.x = options.x;
+        this.y = options.y;
+      }
+
+      Star.prototype.reset = function () {
+        this.size = Math.random() * 2;
+        this.speed = Math.random() * 0.05;
+        this.x = width;
+        this.y = Math.random() * height;
+      };
+
+      Star.prototype.update = function () {
+        this.x -= this.speed;
+        if (this.x < 0) {
+          this.reset();
+        } else {
+          bgCtx.fillRect(this.x, this.y, this.size, this.size);
+        }
+      };
+
+      function ShootingStar() {
+        this.reset();
+      }
+
+      ShootingStar.prototype.reset = function () {
+        this.x = Math.random() * width;
+        this.y = 0;
+        this.len = Math.random() * 80 + 10;
+        this.speed = Math.random() * 10 + 6;
+        this.size = Math.random() * 1 + 0.1;
+        // this is used so the shooting stars arent constant
+        this.waitTime = new Date().getTime() + Math.random() * 3000 + 500;
+        this.active = false;
+      };
+
+      ShootingStar.prototype.update = function () {
+        if (this.active) {
+          this.x -= this.speed;
+          this.y += this.speed;
+          if (this.x < 0 || this.y >= height) {
+            this.reset();
+          } else {
+            bgCtx.lineWidth = this.size;
+            bgCtx.beginPath();
+            bgCtx.moveTo(this.x, this.y);
+            bgCtx.lineTo(this.x + this.len, this.y - this.len);
+            bgCtx.stroke();
+          }
+        } else {
+          if (this.waitTime < new Date().getTime()) {
+            this.active = true;
+          }
+        }
+      };
+
+      var entities = [];
+
+      // init the stars
+      for (var i = 0; i < height; i++) {
+        entities.push(
+          new Star({
+            x: Math.random() * width,
+            y: Math.random() * height,
+          })
+        );
+      }
+
+      // Add 2 shooting stars that just cycle.
+      entities.push(new ShootingStar());
+      entities.push(new ShootingStar());
+      entities.push(new Terrain({ mHeight: height / 2 - 120 }));
+      entities.push(
+        new Terrain({
+          displacement: 120,
+          scrollDelay: 50,
+          fillStyle: "rgb(17,20,40)",
+          mHeight: height / 2 - 60,
+        })
+      );
+      entities.push(
+        new Terrain({
+          displacement: 100,
+          scrollDelay: 20,
+          fillStyle: "rgb(10,10,5)",
+          mHeight: height / 2,
+        })
+      );
+
+      //animate background
+      function animate() {
+        bgCtx.fillStyle = "#110E19";
+        bgCtx.fillRect(0, 0, width, height);
+        bgCtx.fillStyle = "#ffffff";
+        bgCtx.strokeStyle = "#ffffff";
+
+        var entLen = entities.length;
+
+        while (entLen--) {
+          entities[entLen].update();
+        }
+        requestAnimationFrame(animate);
+      }
+      animate();
+    </script>
+  </body>
+</html>
