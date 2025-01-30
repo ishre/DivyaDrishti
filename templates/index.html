@@ -83,7 +83,7 @@
       }
 
       .main-content {
-        flex: 2;
+        flex: 1;
         padding: 4.5rem;
         position: relative;
         display: flex;
@@ -174,22 +174,22 @@
         font-weight: 700;
         text-decoration: none;
         background: linear-gradient(
-    45deg,
-    #00fff2,
-    #00d4ff,
-    #0083ff,
-    #0051ff,
-    #6a00ff,
-    #9500ff,
-    #c700ff,
-    #ff00c8,
-    #ff0099,
-    #ff00c8,
-    #9500ff,
-    #6a00ff,
-    #0083ff,
-    #00fff2
-);
+          45deg,
+          #00fff2,
+          #00d4ff,
+          #0083ff,
+          #0051ff,
+          #6a00ff,
+          #9500ff,
+          #c700ff,
+          #ff00c8,
+          #ff0099,
+          #ff00c8,
+          #9500ff,
+          #6a00ff,
+          #0083ff,
+          #00fff2
+        );
         background-size: 400%;
         cursor: pointer;
         transition: 0.3s;
@@ -217,22 +217,22 @@
         inset: -5px; /* Simplified from individual properties */
         z-index: -1;
         background: linear-gradient(
-    45deg,
-    #00fff2,
-    #00d4ff,
-    #0083ff,
-    #0051ff,
-    #6a00ff,
-    #9500ff,
-    #c700ff,
-    #ff00c8,
-    #ff0099,
-    #ff00c8,
-    #9500ff,
-    #6a00ff,
-    #0083ff,
-    #00fff2
-);
+          45deg,
+          #00fff2,
+          #00d4ff,
+          #0083ff,
+          #0051ff,
+          #6a00ff,
+          #9500ff,
+          #c700ff,
+          #ff00c8,
+          #ff0099,
+          #ff00c8,
+          #9500ff,
+          #6a00ff,
+          #0083ff,
+          #00fff2
+        );
         background-size: 400%;
         opacity: 0;
         transition: 0.2s;
@@ -362,6 +362,40 @@
         color: rgba(255, 255, 255, 0.696);
         z-index: 2;
       }
+
+      .genie-container img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        opacity: 0;
+        animation: hardCut 12s infinite steps(1); /* Changed to 12s (4 images × 3s each) */
+      }
+
+      .genie-container img:nth-child(2) {
+        animation-delay: 3s;
+      }
+
+      .genie-container img:nth-child(3) {
+        animation-delay: 6s;
+      }
+
+      .genie-container img:nth-child(4) {
+        animation-delay: 9s; /* Added delay for fourth image */
+      }
+
+      @keyframes hardCut {
+        0%,
+        24% {
+          opacity: 1;
+        } /* Changed from 33% to 24% to accommodate 4 images */
+        25%,
+        100% {
+          opacity: 0;
+        }
+      }
     </style>
   </head>
   <body>
@@ -370,8 +404,20 @@
       <div class="genie-section">
         <div class="genie-container">
           <img
-            src="{{ url_for('static', filename='images/genie.png') }}"
-            alt="Genie"
+            src="{{ url_for('static', filename='images/img1.png') }}"
+            alt="Genie 1"
+          />
+          <img
+            src="{{ url_for('static', filename='images/img2.png') }}"
+            alt="Genie 2"
+          />
+          <img
+            src="{{ url_for('static', filename='images/img3.png') }}"
+            alt="Genie 3"
+          />
+          <img
+            src="{{ url_for('static', filename='images/img4.png') }}"
+            alt="Genie 4"
           />
         </div>
       </div>
@@ -452,7 +498,9 @@
         </div>
       </div>
     </div>
-    <span class="credits">Developed by Students of Class 11th @ DWPS ASHTA</span>
+    <span class="credits"
+      >Developed by Students of Class 11th @ DWPS ASHTA</span
+    >
 
     <!-- Audio for Gameplay -->
     <audio
@@ -472,7 +520,7 @@
     ></audio>
 
     <script>
-      const API_BASE = "https://divya-drishti-taupe.vercel.app/";
+      const API_BASE = "https://divyadrishti.vercel.app";
       let sessionId = Date.now();
       let buttonsEnabled = true;
 
